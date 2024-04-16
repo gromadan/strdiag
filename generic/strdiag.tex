@@ -1,0 +1,148 @@
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shapes.geometric} 
+\def\cup{\Diagram{\draw (1,1) .. controls +(down:0.5) and +(down:0.5) .. (2,1);}}
+\def\cap{\Diagram{\draw (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
+\def\id{\Diagram{\draw (1,0) -- (1,1);}}
+
+\def\capR{\Diagram{\draw[mid arrow] (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
+\def\idF{\Diagram{\draw[mid arrow] (1,0) -- (1,1);}}
+\def\idB{\Diagram{\draw[mid arrow] (1,1) -- (1,0);}}
+
+\def\textchoice#1#2#3#4#5{\ifmmode\mathchoice{#1}{#2}{#3}{#4}\else #5\fi}
+
+\def\Diagram#1{%
+\thinspace\textchoice
+{\DiagramA{0.25em}{1em}{1em}{#1}}
+{\DiagramA{0.25em}{0.7em}{1em}{#1}}
+{\DiagramA{0.175em}{0.55em}{0.7em}{#1}}
+{\DiagramA{0.125em}{0.4em}{0.5em}{#1}}
+{\DiagramA{0.25em}{0.7em}{1em}{#1}}%
+\thinspace%
+}
+
+\def\DiagramA#1#2#3#4{%
+%\expandafter\tikzpicture\Gparam
+\tikzpicture[
+	%arrow styles
+	mid arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .5 with {\arrow{>}}
+      }}},
+	%point styles
+	circ/.style={circle,draw,fill=white,inner sep=1pt},
+	bcirc/.style={circle,draw,fill=black,inner sep=1pt},
+	map/.style={draw,fill=white,trapezium,trapezium left angle=90,trapezium right angle=120,inner sep=1pt},
+	mapC/.style={draw,fill=white,trapezium,trapezium left angle=120,trapezium right angle=90,inner sep=1pt},
+	mapT/.style={draw,fill=white,trapezium,trapezium left angle=60,trapezium right angle=90,inner sep=1pt},
+	mapA/.style={draw,fill=white,trapezium,trapezium left angle=90,trapezium right angle=60,inner sep=1pt},
+	selfC/.style={draw,fill=white,trapezium,trapezium left angle=120,trapezium right angle=120,inner sep=1pt},
+	selfCR/.style={draw,fill=white,trapezium,trapezium left angle=60,trapezium right angle=60,inner sep=1pt},
+	selfT/.style={draw,fill=white,trapezium,trapezium left angle=60,trapezium right angle=120,inner sep=1pt},
+	selfTR/.style={draw,fill=white,trapezium,trapezium left angle=120,trapezium right angle=60,inner sep=1pt},
+	selfA/.style={draw,fill=white,signal,signal to=east,inner sep=1pt},
+	selfAR/.style={draw,fill=white,signal,signal to=west,inner sep=1pt},
+	square/.style={draw,fill=white,rectangle,inner sep=1pt},
+	vec/.style={draw,fill=white,isosceles triangle, shape border rotate=-90,isosceles triangle apex angle=60,inner sep=1pt},
+	covec/.style={draw,fill=white,isosceles triangle, shape border rotate=90,isosceles triangle apex angle=60,inner sep=1pt},
+]
+\pgfsetbaseline{#1}
+\pgfsetxvec{\pgfpoint{#2}{0em}}
+\pgfsetyvec{\pgfpoint{0em}{#3}}
+\pgfsetlinewidth{\Dlinewidth em}
+#4
+\endtikzpicture
+}
+
+\def\Dlinewidth{0.05}
+
+\def\DstringsB #1/#2(#3,#4){
+%\ifnum9<1#1
+\pgfmathparse{#3-(#1-1)/2}
+\let\x=\pgfmathresult
+\pgfmathparse{#3+(#1-1)/2}
+\let\xx=\pgfmathresult
+\foreach \a in {\x,...,\xx}
+	\draw (\a,#4-\Dyshift) .. controls +(up:0.25) .. (#3,#4);
+\foreach \a in {\x,...,\xx}
+	\draw (\a,#4+\Dyshift) .. controls +(down:0.25) .. (#3,#4);
+%\fi
+}
+
+\newcount\tmpcount
+\def\Dcount#1{\ifx/#1/\else\advance\tmpcount by1\fihere\Dcount\fi}
+
+\def\DstringsC [#1/#2](#3,#4){
+\tmpcount=-1
+\Dcount#1//
+\pgfmathparse{#3-\the\tmpcount/2}
+\let\x=\pgfmathresult
+\scope[
+	up arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .3 with {\arrow{>}}
+      }}},
+	down arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .3 with {\arrow{<}}
+      }}},
+]
+\DstringsD{#3}{#4}#1//
+\endscope
+\tmpcount=-1
+\Dcount#2//
+\pgfmathparse{#3-\the\tmpcount/2}
+\let\x=\pgfmathresult
+\scope[
+	down arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .7 with {\arrow{>}}
+      }}},
+	up arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .7 with {\arrow{<}}
+      }}},
+]
+\DstringsE{#3}{#4}#2//
+\endscope
+}
+
+\def\fihere#1\fi{\fi#1}
+\def\DstringsD#1#2#3{\ifx/#3/\else
+	\csname D#3\endcsname (\x,#2-\Dyshift) .. controls +(up:0.25) .. (#1,#2);
+	\pgfmathparse{\x+1}
+	\let\x=\pgfmathresult
+	\fihere\DstringsD{#1}{#2}\fi
+}
+\def\DstringsE#1#2#3{\ifx/#3/\else
+	\csname D#3\endcsname (\x,#2+\Dyshift) .. controls +(down:0.25) .. (#1,#2);
+	\pgfmathparse{\x+1}
+	\let\x=\pgfmathresult
+	\fihere\DstringsE{#1}{#2}\fi
+}
+
+\def\Dstrings{
+\futurelet\nextchar\DstringsA
+}
+
+\def\DstringsA{\ifx[\nextchar\let\next=\DstringsC\else\let\next=\DstringsB\fi\next}
+
+\def\Dmor#1#2 (#3,#4){
+\def\Dyshift{0.5}
+\ifx;#2;\else\Dstrings#2(#3,#4)\fi
+\node at (#3,#4) [#1] {};
+}
+
+\def\DMor#1#2 (#3,#4)#5{
+\def\Dyshift{1}
+\ifx;#2;\else\Dstrings#2(#3,#4)\fi
+\node at (#3,#4) [#1] {#5};
+}
+
+\def\Ddef#1#2{\expandafter\def\csname D#1\endcsname{#2}}
+\Ddef>{\draw[>-]}
+\Ddef<{\draw[<-]}
+\Ddef-{\draw}
+\expandafter\def\csname D0\endcsname#1;{}
+\expandafter\def\csname D.\endcsname (#1,#2)#3;{\node at (#1,#2) {$\dots$};}
+
+\endinput
