@@ -2,11 +2,12 @@
 \usetikzlibrary{shapes.geometric} 
 \def\cup{\Diagram{\draw (1,1) .. controls +(down:0.5) and +(down:0.5) .. (2,1);}}
 \def\cap{\Diagram{\draw (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
-\def\id{\Diagram{\draw (1,0) -- (1,1);}}
+\def\Did{\Diagram{\draw (1,0) -- (1,1);}}
 
-\def\capR{\Diagram{\draw[mid arrow] (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
-\def\idF{\Diagram{\draw[mid arrow] (1,0) -- (1,1);}}
-\def\idB{\Diagram{\draw[mid arrow] (1,1) -- (1,0);}}
+\def\Rcap{\Diagram{\draw[mid arrow] (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
+\def\Lcap{\Diagram{\draw[mid arrow] (2,0) .. controls +(up:0.5) and +(up:0.5) .. (1,0);}}
+\def\Fid{\Diagram{\draw[mid arrow] (1,0) -- (1,1);}}
+\def\Bid{\Diagram{\draw[mid arrow] (1,1) -- (1,0);}}
 
 \def\textchoice#1#2#3#4#5{\ifmmode\mathchoice{#1}{#2}{#3}{#4}\else #5\fi}
 
@@ -56,16 +57,22 @@
 \def\Dlinewidth{0.05}
 
 \def\DstringsB #1/#2(#3,#4){
-%\ifnum9<1#1
+\ifnum#1>0
 \pgfmathparse{#3-(#1-1)/2}
 \let\x=\pgfmathresult
 \pgfmathparse{#3+(#1-1)/2}
 \let\xx=\pgfmathresult
 \foreach \a in {\x,...,\xx}
 	\draw (\a,#4-\Dyshift) .. controls +(up:0.25) .. (#3,#4);
+\fi
+\ifnum#2>0
+\pgfmathparse{#3-(#2-1)/2}
+\let\x=\pgfmathresult
+\pgfmathparse{#3+(#2-1)/2}
+\let\xx=\pgfmathresult
 \foreach \a in {\x,...,\xx}
 	\draw (\a,#4+\Dyshift) .. controls +(down:0.25) .. (#3,#4);
-%\fi
+\fi
 }
 
 \newcount\tmpcount
