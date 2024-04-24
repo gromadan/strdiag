@@ -146,8 +146,8 @@
 }
 
 \def\Ddef#1#2{\expandafter\def\csname D#1\endcsname{#2}}
-\Ddef>{\draw[>-]}
-\Ddef<{\draw[<-]}
+\Ddef>{\draw[<-]}
+\Ddef<{\draw[>-]}
 \Ddef-{\draw}
 \expandafter\def\csname D0\endcsname#1;{}
 \expandafter\def\csname D.\endcsname (#1,#2)#3;{\node at (#1,#2) {$\dots$};}
