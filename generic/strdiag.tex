@@ -1,8 +1,10 @@
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{shapes.geometric} 
+\usetikzlibrary{shapes.symbols} 
 \def\cup{\Diagram{\draw (1,1) .. controls +(down:0.5) and +(down:0.5) .. (2,1);}}
 \def\cap{\Diagram{\draw (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
 \def\Did{\Diagram{\draw (1,0) -- (1,1);}}
+\def\Dcross{\Diagram{\draw (0,0) -- (1,1);\draw (1,0) -- (0,1);}}
 
 \def\Rcap{\Diagram{\draw[mid arrow] (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
 \def\Lcap{\Diagram{\draw[mid arrow] (2,0) .. controls +(up:0.5) and +(up:0.5) .. (1,0);}}
@@ -28,6 +30,10 @@
 	mid arrow/.style={postaction={decorate,decoration={
         markings,
         mark=at position .5 with {\arrow{>}}
+      }}},
+	late arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .8 with {\arrow{>}}
       }}},
 	%point styles
 	circ/.style={circle,draw,fill=white,inner sep=1pt},
@@ -144,6 +150,11 @@
 \ifx;#2;\else\Dstrings#2(#3,#4)\fi
 \node at (#3,#4) [#1] {#5};
 }
+
+\def\spider{\futurelet\nextchar\spiderA}
+\def\spiderA{\ifx[\nextchar\def\next[##1]{\Diagram{\Dmor{bcirc}[##1] (1,0.5)}}\else\def\next##1{\Diagram{\Dmor{bcirc}##1 (1,0.5)}}\fi\next}
+\def\wspider{\futurelet\nextchar\wspiderA}
+\def\wspiderA{\ifx[\nextchar\def\next[##1]{\Diagram{\Dmor{circ}[##1] (1,0.5)}}\else\def\next##1{\Diagram{\Dmor{circ}##1 (1,0.5)}}\fi\next}
 
 \def\Ddef#1#2{\expandafter\def\csname D#1\endcsname{#2}}
 \Ddef>{\draw[<-]}

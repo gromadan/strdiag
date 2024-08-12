@@ -1,0 +1,152 @@
+%Documentation written in optex
+%Compile by: optex strdiag-doc.tex
+%Daniel Gromada 2024
+
+
+\load[tikz]
+\load[strdiag]
+
+\activettchar"
+\catcode`\<=13 
+\def<#1>{\hbox{$\langle$\it#1\/$\rangle$}}
+\everyintt{\catcode`\<=13 }
+
+\tit strdiag -- typesetting string diagrams
+
+{\hfil\it Daniel Gromada, 2024}
+\nobreak\bigskip
+
+The file "strdiag.tex" contains macros for typesetting string diagrams used in quantum groups or categorical quantum information. The macros are based on Ti$k$Z. So, to use "strdiag", one has to install Ti$k$Z first. Then, one can write in plain\TeX
+\begtt
+\input tikz
+\input partmac
+\endtt
+For \LaTeX users, I've prepared the file "strdiag.sty", which includes PGF automatically, so it is sufficient to write
+\begtt
+\usepackage{strdiag}
+\endtt
+
+This is still work in progress, I am happy for any sort of comments and suggestions.
+
+\sec Basic usage
+
+\secc Predefined diagrams
+
+The following macros are defined
+
+\bigskip\hfil\table{lclclclc}{
+"\cup"    & \cup     & "\cap"   & \cap  & "\Did" & \Did & "\Dcross" & \Dcross\cr
+"\Rcap"   & \Rcap    & "\Lcap"  & \Lcap & "\Fid" & \Fid & "\Bid"    & \Bid\cr
+}
+
+\secc Strings
+
+The central macro of this package is "\Diagram{<data>}", which essentailly opens a Ti$k$Z picture and sets the coordinates. You can use any Ti$k$Z macros you want inside <data>. As an example, the "\cap" macro is defined by
+
+\begtt
+\Diagram{
+	\draw (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);
+}
+\endtt
+
+\secc Boxes
+
+There are two similar macros to typeset morphisms, namely "\Dmor{<shape>}<in>/<out> (<x>,<y>)" and "\DMor{<shape>}[<in>/<out>] (<x>,<y>) {<label>}". 
+
+Here, <shape> can be one of
+
+{
+\def\shape #1 {\Diagram{\Dmor{#1} (0,0.5)}}
+\bigskip\hfil\table{llllll}{
+"circ" & \shape circ & "bcirc" & \shape bcirc & "square" & \shape square \cr
+"vec"  & \shape vec  & "covec" & \shape covec & "map"    & \shape map \cr
+"mapC" & \shape mapC & "mapT"  & \shape mapT  & "mapA"   & \shape mapA \cr
+"selfC" & \shape selfC & "selfT"  & \shape selfT  & "selfA"   & \shape selfA \cr
+"selfCR" & \shape selfCR & "selfTR"  & \shape selfTR  & "selfAR"   & \shape selfAR \cr
+}}
+
+The data <x> and <y> are the coordinates of the box. The value $y=0.5$ should correspond to the middle of the line.
+
+The data <in> and <out> can be numbers standing for the number of inputs and outputs. This part of declaration is optional. If you skip it, there will be no strings attached to the box. Using "\Dmor", the endpoints of the inputs and outputs will be placed at distance $\Delta y=0.5$ (if the box is placed at $y=0.5$, then the inputs are at $y=0$ and outputs at $y=1$). The distance is $\Delta y=1$ if you use "\DMor". The inputs and outputs are spaced by the distance $\Delta x=1$.
+
+The extra parameter <label> of "\DMor" stands for a text that should be placed inside a box. So that in total, you can type
+
+$$"\Diagram{\DMor{map}2/1 (0,0.5) {cool channel}}"\quad\hbox{for}\quad \Diagram{\DMor{map}2/1 (0,0.5) {cool channel}}$$
+
+You can of course have more than one box in a diagram and you can combine them with simple lines drawn by the Ti$k$Z "\draw" command to obtain something like
+
+$$
+\vcenter{\hsize=0.7\hsize
+\begtt
+\Diagram{
+	\DMor{vec}0/1 (0,-1.5) {$\psi$}
+	\DMor{vec}0/1 (1.5,-1.5) {$\phi$}
+	\DMor{map}1/2 (0,.5)  {$\Phi$}
+	\Dmor{circ}2/1 (1,2)
+	\draw (1.5,-.5) -- (1.5,1.5);
+	\draw (-.5,1.5) -- (-.5,2.5);
+}
+\endtt
+}\vcenter{\hsize=0.3\hsize$\displaystyle
+\Diagram{
+	\DMor{vec}0/1 (0,-1.5) {$\psi$}
+	\DMor{vec}0/1 (1.5,-1.5) {$\phi$}
+	\DMor{map}1/2 (0,.5)  {$\Phi$}
+	\Dmor{circ}2/1 (1,2)
+	\draw (1.5,-.5) -- (1.5,1.5);
+	\draw (-.5,1.5) -- (-.5,2.5);
+}
+$}
+$$
+
+There is also a shorthand for drawing single spiders: "\spider{<in>/<out>}" stands for
+$$"\Diagram{\Dmor{bcirc}<in>/<out> (1,0.5)}".$$
+Similarly works "\wsipder" just using "circ" instead of "bcirc".
+
+So, for instance, "\spider{3/2}" creates \spider{3/2}.
+
+\secc Arrows
+
+Considering the "\Dmor" and "\DMor" macros, one can replace "<in>/<out>" by "[<in>/<out>]", where <in> and <out> are not numbers, but strings of characters from the following list
+
+{\everyintt{}
+\bigskip\hfil\table{ll}{
+">" & outgoing arrow \cr
+"<" & incoming arrow \cr
+"-" & a string without arrow \cr
+"0" & no string\cr
+"." & three dots\cr
+}
+}
+
+\catcode`\<=12
+In the same way, you can use "\spider[<in>/<out>]" or "\wsipder[<in>/<out>]". So, for instance, you can write {\everyintt{}"\wspider[<>0-/>.>]"} to obtain \wspider[<>0-/>.>].
+
+We also define new Ti$k$Z string styles "mid arrow" and "late arrow" to add arrows in the middle of a string. As an example, let us use the above to arrowise the example from the previous section. Note that if you want to avoid doubling the arrows within one string, you have to pay special attention and it becomes unfortunately rather less straightforward.
+
+$$\everyintt{}
+\vcenter{\hsize=0.7\hsize
+\begtt
+\Diagram{
+	\DMor{vec}0/1 (0,-1.5) {$\psi$}
+	\DMor{vec}0/1 (1.5,-1.5) {$\phi$}
+	\DMor{map}1/2 (0,.5)  {$\Phi$}
+	\Dmor{circ}2/1 (1,2)
+	\draw (1.5,-.5) -- (1.5,1.5);
+	\draw (-.5,1.5) -- (-.5,2.5);
+}
+\endtt
+}\vcenter{\hsize=0.3\hsize$\displaystyle
+\Diagram{
+	\DMor{vec}[/>] (0,-1.5) {$\psi$}
+	\DMor{vec}[/-] (1.5,-1.5) {$\phi$}
+	\DMor{map}1/2 (0,.5)  {$\Phi$}
+	\Dmor{circ}[>-/<] (1,2)
+	\draw[mid arrow] (1.5,1.5) -- (1.5,-.5);
+	\draw[mid arrow] (-.5,1.5) -- (-.5,2.5);
+}
+$}
+$$
+
+\bye
+
