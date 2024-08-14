@@ -128,12 +128,12 @@ $$\everyintt{}
 \vcenter{\hsize=0.7\hsize
 \begtt
 \Diagram{
-	\DMor{vec}0/1 (0,-1.5) {$\psi$}
-	\DMor{vec}0/1 (1.5,-1.5) {$\phi$}
+	\DMor{vec}[/>] (0,-1.5) {$\psi$}
+	\DMor{vec}[/-] (1.5,-1.5) {$\phi$}
 	\DMor{map}1/2 (0,.5)  {$\Phi$}
-	\Dmor{circ}2/1 (1,2)
-	\draw (1.5,-.5) -- (1.5,1.5);
-	\draw (-.5,1.5) -- (-.5,2.5);
+	\Dmor{circ}[>-/<] (1,2)
+	\draw[mid arrow] (1.5,1.5) -- (1.5,-.5);
+	\draw[mid arrow] (-.5,1.5) -- (-.5,2.5);
 }
 \endtt
 }\vcenter{\hsize=0.3\hsize$\displaystyle
