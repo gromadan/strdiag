@@ -6,6 +6,8 @@
 \def\Did{\Diagram{\draw (1,0) -- (1,1);}}
 \def\Dcross{\Diagram{\draw (0,0) -- (1,1);\draw (1,0) -- (0,1);}}
 
+\def\Rcup{\Diagram{\draw[mid arrow] (1,1) .. controls +(down:0.5) and +(down:0.5) .. (2,1);}}
+\def\Lcup{\Diagram{\draw[mid arrow] (2,1) .. controls +(down:0.5) and +(down:0.5) .. (1,1);}}
 \def\Rcap{\Diagram{\draw[mid arrow] (1,0) .. controls +(up:0.5) and +(up:0.5) .. (2,0);}}
 \def\Lcap{\Diagram{\draw[mid arrow] (2,0) .. controls +(up:0.5) and +(up:0.5) .. (1,0);}}
 \def\Fid{\Diagram{\draw[mid arrow] (1,0) -- (1,1);}}
@@ -160,6 +162,7 @@
 \Ddef>{\draw[<-]}
 \Ddef<{\draw[>-]}
 \Ddef-{\draw}
+\Ddef={\draw[very thick]}
 \expandafter\def\csname D0\endcsname#1;{}
 \expandafter\def\csname D.\endcsname (#1,#2)#3;{\node at (#1,#2) {$\dots$};}
 
